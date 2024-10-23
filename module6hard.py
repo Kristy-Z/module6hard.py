@@ -3,7 +3,6 @@ from math import pi, sqrt
 class Figure:
     sides_count = 0
 
-
     def __init__(self, color, *sides):
         self.__color = color
         self.__sides = sides
@@ -11,7 +10,7 @@ class Figure:
     def get_color(self):
         return self.__color
 
-    def __is_valid_sides(self, r, g, b):
+    def __is_valid_color(self, r, g, b):
         if 0 < r < 255 and 0 < b <= 255:
             return r, g, b
         else:
@@ -47,10 +46,9 @@ class Circle(Figure):
 
     def __init__(self, color, *sides):
         super().__init__(color, *sides)
-        self.__sides = sides
-        self.__radius = self.__sides[0] / (2 * pi)
+        self.sides = sides
 
-    def get_squart(self):
+    def get_square(self):
         Sc = (self.__radius ** 2) * pi
         return Sc
 
@@ -75,7 +73,7 @@ class Cube(Figure):
         self.sides = sides
 
     def get_volume(self):
-        Vc = self_sides[0] ** 3
+        Vc = self.sides[0] ** 3
         return Vc
 
 circle1 = Circle((200, 200, 100), 10) # (Цвет, стороны)
