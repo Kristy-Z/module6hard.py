@@ -3,9 +3,10 @@ from math import pi, sqrt
 class Figure:
     sides_count = 0
 
-    def __init__(self, color, *sides):
-        self.__color = color
-        self.__sides = sides
+    def __init__(self, color: list, *sides: int):
+        self.__color = [*color]
+        self.__sides = [*sides]
+        self.filled = False
 
     def get_color(self):
         return self.__color
