@@ -1,81 +1,77 @@
-from math import pi, sqrt
-
 class Figure:
     sides_count = 0
 
-    def __init__(self, color: list, *sides: int):
-        self.__color = [*color]
-        self.__sides = [*sides]
+
+    def __init__(self, sides, color):
+        self.__sides = sides
+        self.__color = color
         self.filled = False
 
     def get_color(self):
-        return self.__color
+        return list(self.__color)
 
     def __is_valid_color(self, r, g, b):
-        if 0 < r < 255 and 0 < b <= 255:
-            return r, g, b
+        if (0 <= r <= 255 and 0 <= g <= 255 and 0 <= b <= 255 and
+                (isinstance(r, int) and isinstance(g, int) and isinstance(b, int))):
+            return True
         else:
-            return self.__color
+            return False
 
     def set_color(self, r, g, b):
-        new_color = self.__is_valid_color(r, g, b)
-        self.__color = list(new_color)
-        return self.__color
+        if self.__is_valid_color(r, g, b):
+            self.__color = (r, g, b)
 
-    def _is_valid_sides(self, *new_sides):
-        for i in new_sides:
-            if i > 0:
-                if len(new_sides) == self.sides_count:
-                    return True
-                else:
-                    return False
+    def __is_valid_side(self, *sides):
+        for side in sides:
+            if len(sides) == self.sides_count and isinstance(side, int) and side > 0:
+                return True
+            else:
+                return False
 
     def get_sides(self):
-        return self.__sides
+        return list(self.__sides)
 
     def __len__(self):
-        return sum(self.__sides)
+        side = 0
+        for i in self.__sides:
+            side += i
+        return side
 
     def set_sides(self, *new_sides):
-        for k in new_sides:
-            if k != self._is_valid_sides(k):
-                self.__sides = list(new_sides)
-            return self.__sides
+        if self.__is_valid_side(*new_sides):
+            self.__sides = new_sides
 
 class Circle(Figure):
     sides_count = 1
+    __radius = None
 
-    def __init__(self, color, *sides):
-        super().__init__(color, *sides)
-        self.sides = sides
+    def __init__(self, color, sides):
+        super().__init__(sides, color)
+        self.__radius = 2 * 3.14 * sides
+        self.__sides = sides
 
     def get_square(self):
-        Sc = (self.__radius ** 2) * pi
-        return Sc
+        return (self.__radius ** 2) * 3.14
 
 class Triangle(Figure):
     sides_count = 3
 
-    def __init__(self, color, *sides):
-        super().__init__(color, *sides)
-        self.sides = sides
-        p = (self.sides[0] + self.sides[1] + self.sides[2]) / 2
-        self.__height = 2 * (sqrt(p * (p - self.sides[0]) * (p - self.sides[1]) * (p - self.sides[2]))) / self.sides[0]
+    def __init__(self, color, sides):
+        super().__init__(sides, color)
 
-    def get_square(self):
-        St = (self.__height * self.sides[0]) / 2
-        return St
+    def get_square(self, a, b, c):
+        p = 1 / 2 * (a + b + c)
+        return (p * (p - a) * (p - b) * (p - c)) ** 0.5
 
 class Cube(Figure):
     sides_count = 12
 
-    def __init__(self, color, *sides):
-        super().__init__(color, *sides)
-        self.sides = sides
+    def __init__(self, color, sides):
+        super().__init__([sides] * self.sides_count, color)
 
     def get_volume(self):
-        Vc = self.sides[0] ** 3
-        return Vc
+        return self.get_sides()[0] ** 3
+
 
 circle1 = Circle((200, 200, 100), 10) # (Цвет, стороны)
 cube1 = Cube((222, 35, 130), 6)
@@ -97,5 +93,3 @@ print(len(circle1))
 
 # Проверка объёма (куба):
 print(cube1.get_volume())
-
-
